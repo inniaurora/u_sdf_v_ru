@@ -1,0 +1,211 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultimate SDF Vision</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('background.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+            color: #ffffff;
+        }
+        header {
+            background-color: #111111;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid #444444;
+        }
+        nav {
+            display: flex;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #444444;
+        }
+        nav button {
+            flex: 1;
+            padding: 14px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        nav button:hover {
+            background-color: #2a2a2a;
+        }
+        .content {
+            padding: 20px;
+            min-height: calc(100vh - 100px);
+        }
+        ul.errors-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul.errors-list li {
+            background-color: #1e1e1e;
+            margin: 5px 0;
+            padding: 10px;
+            border-left: 4px solid #ff4444;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        ul.errors-list li:hover {
+            background-color: #2c2c2c;
+        }
+        .error-description {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #111111;
+            border-left: 4px solid #00aaff;
+            display: none;
+        }
+        .link-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #333333;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            border: 1px solid #555555;
+            transition: background 0.3s, border 0.3s;
+        }
+        .link-button:hover {
+            background-color: #444444;
+            border-color: #777777;
+        }
+
+        /* Formatting for links tab */
+        .links-rus {
+            line-height: 1.8;
+        }
+        .links-rus a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+        .links-rus a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tools tab style */
+        .tools-content {
+            line-height: 1.8;
+        }
+        .tools-content a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+        .tools-content a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<header>Ultimate SDF Vision</header>
+
+<nav>
+    <button onclick="showTab('tools')">Tools</button>
+    <button onclick="showTab('errors')">Errors</button>
+    <button onclick="showTab('datamine')">Datamine</button>
+    <button onclick="showTab('links_rus')">Links RUS</button>
+</nav>
+
+<div class="content" id="tabContent">
+    <p>Выберите вкладку выше для просмотра информации.</p>
+</div>
+
+<script>
+    const errorDescriptions = {
+        "Error code 16": "Turns out, most of the time it's a driver issue - we found out that he managed to use NVIDIA software on an AMD/Radeon device. After getting the right software and updating the drivers, it worked perfectly.",
+        "Error: 21": "You'll need to go into your Services and find \"TavernWorker_3_1\" service and manually right-click and 'Start' the service. Setting this to automatically start does NOT work. If it not help, reinstall game and repeat process.",
+        "Error 26": "Use STEAMDECK=1 %command% in the launch options. It will work.",
+        "Ошибка подключения RUS ONLY": "Не можете подключиться к серверу? Выдает ошибку 26-15 или вовсе не подключает без ошибок? Или пропали персонажи? Это региональные ограничения связанные с запретом Cloudflare, для того, что бы подключиться к игре, нужно эти ограничения обойти, либо впн, либо zapret_cloudflare."
+    };
+
+    function createErrorItem(code, description) {
+        return `
+            <li onclick="toggleDescription('${code}')">
+                ${code}
+                <div id="desc-${code}" class="error-description">${description}</div>
+            </li>
+        `;
+    }
+
+    const tabData = {
+        tools: `
+            <h2>Tools</h2>
+            <div class="tools-content">
+                MAP: <a href="https://darkanddarker.map.spellsandguns.com" target="_blank">https://darkanddarker.map.spellsandguns.com</a><br>
+                QUESTS: <a href="https://darkanddarkertracker.com/questtracker" target="_blank">https://darkanddarkertracker.com/questtracker</a><br>
+                PRICE CHECK: <a href="https://darkerdb.com/" target="_blank">https://darkerdb.com/</a><br>
+                Ultimate DaD Tool (WiP): <a href="https://www.reddit.com/r/DarkAndDarker/comments/1jo142b/dad_tools_a_project_im_working_on/" target="_blank">https://www.reddit.com/r/DarkAndDarker/comments/1jo142b/dad_tools_a_project_im_working_on/</a>
+            </div>
+        `,
+        errors: `
+            <h2>Errors</h2>
+            <p>Список ошибок и логи:</p>
+            <ul class='errors-list'>
+                ${Object.entries({
+                    "Error code 16": "Connection failed",
+                    "Error: 21": "Timeout exceeded",
+                    "Error 26": "Invalid data format",
+                    "Ошибка подключения RUS ONLY": "File not found"
+                }).map(([code, title]) => createErrorItem(code, errorDescriptions[code])).join('')}
+            </ul>
+        `,
+        datamine: "<h2>Datamine</h2><p>Инструменты анализа данных.</p><br><a href='https://goo.su/uNKFS' target='_blank' class='link-button'>THX Spells and Guns, 2point</a>",
+        links_rus: `
+            <h2>Links RUS</h2>
+            <div class="links-rus">
+                <strong>Ру комьюнити</strong><br>
+                Дискорд: <a href="https://discord.gg/s57dss593j" target="_blank">https://discord.gg/s57dss593j</a><br>
+                Вк: <a href="https://vk.me/join/qGzIaWumPHwDF09ZRq_16ANWY0i2djuLPEc=" target="_blank">https://vk.me/join/qGzIaWumPHwDF09ZRq_16ANWY0i2djuLPEc=</a><br>
+                Телега: <a href="https://t.me/darkanddarker_chat" target="_blank">https://t.me/darkanddarker_chat</a><br><br>
+
+                <strong>Любые адекватные вопросы (румодеры дс):</strong> @real11ze , @igorechek<br><br>
+
+                <strong>Почему я не могу зайти в игру?</strong><br>
+                Одному б-ну известно почему, возможно патч, возможно сдф.<br>
+                Всю информацию о состоянии серверов можно найти на официальном дискорд сервере: <a href="https://discord.gg/darkanddarker" target="_blank">https://discord.gg/darkanddarker</a><br><br>
+
+                <strong>Когда вайп?</strong><br>
+                Каждые три-четыре месяца. Крайний вайп был 10го апреля.<br><br>
+
+                <strong>Кого посмотреть</strong><br>
+                Воин: <a href=\"https://www.twitch.tv/nouvelle\" target=\"_blank\">https://www.twitch.tv/nouvelle</a> (Тут должен был быть Юно, но тут Новелл)<br>
+                Лучник: <a href=\"https://www.twitch.tv/benjihawkey\" target=\"_blank\">https://www.twitch.tv/benjihawkey</a> (редко поточит, но отличный лучник)<br>
+                Чернокнижник: placeholder<br>
+                Бард: <a href=\"https://www.twitch.tv/meideishab\" target=\"_blank\">https://www.twitch.tv/meideishab</a><br>
+                Друид: <a href=\"https://www.twitch.tv/eatsmettv\" target=\"_blank\">https://www.twitch.tv/eatsmettv</a> (Миша)<br>
+                Варвар: <a href=\"https://www.twitch.tv/rebelll52\" target=\"_blank\">https://www.twitch.tv/rebelll52</a> (А кто если не Ребелл?)<br>
+                Плут: <a href=\"https://www.twitch.tv/yaken3000\" target=\"_blank\">https://www.twitch.tv/yaken3000</a> (Симулятор убийства виверны?)<br>
+                Волшебник: <a href=\"https://www.twitch.tv/xxxdym\" target=\"_blank\">twitch.tv/xxxdym</a> (<a href=\"https://www.youtube.com/watch?v=ltsDhpXBnKY\" target=\"_blank\">https://www.youtube.com/watch?v=ltsDhpXBnKY</a>)<br>
+                Чародей: placeholder<br><br>
+
+                <strong>Новости:</strong> <a href=\"https://www.youtube.com/@djedybreamtv\" target=\"_blank\">https://www.youtube.com/@djedybreamtv</a>
+            </div>
+        `
+    };
+
+    function toggleDescription(code) {
+        const descEl = document.getElementById("desc-" + code);
+        descEl.style.display = descEl.style.display === "block" ? "none" : "block";
+    }
+
+    function showTab(tab) {
+        const contentDiv = document.getElementById("tabContent");
+        contentDiv.innerHTML = tabData[tab] || "<p>Неизвестная вкладка.</p>";
+    }
+</script>
+
+</body>
+</html>
+```
