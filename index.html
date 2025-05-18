@@ -8,9 +8,9 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-image: url('background.jpg');
-background-size: cover;
-background-repeat: no-repeat;
-background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: #ffffff;
         }
         header {
@@ -43,6 +43,35 @@ background-attachment: fixed;
             padding: 20px;
             min-height: calc(100vh - 100px);
         }
+
+        /* Кнопка для квеста */
+        .quest-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #2c2c2c;
+            color: #ffffff;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #555555;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .quest-button:hover {
+            background-color: #3a3a3a;
+            transform: scale(1.02);
+        }
+
+        /* Изображение квеста */
+        .quest-image {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #444;
+            border-radius: 8px;
+        }
+
         ul.errors-list {
             list-style-type: none;
             padding-left: 0;
@@ -114,6 +143,7 @@ background-attachment: fixed;
     <button onclick="showTab('tools')">Tools</button>
     <button onclick="showTab('errors')">Errors</button>
     <button onclick="showTab('datamine')">Datamine</button>
+    <button onclick="showTab('quests')">Quests</button>
     <button onclick="showTab('links_rus')">Links RUS</button>
 </nav>
 
@@ -142,11 +172,11 @@ background-attachment: fixed;
         tools: `
             <h2>Tools</h2>
             <div class="tools-content">
-                MAP: <a href="https://darkanddarker.map.spellsandguns.com" target="_blank">https://darkanddarker.map.spellsandguns.com</a><br>
-                QUESTS: <a href="https://darkanddarkertracker.com/questtracker" target="_blank">https://darkanddarkertracker.com/questtracker</a><br>
-                PRICE CHECK: <a href="https://darkerdb.com/" target="_blank">https://darkerdb.com/</a><br>
-                Ultimate DaD Tool (WiP): <a href="https://www.reddit.com/r/DarkAndDarker/comments/1jo142b/dad_tools_a_project_im_working_on/" target="_blank">https://www.reddit.com/r/DarkAndDarker/comments/1jo142b/dad_tools_a_project_im_working_on/</a><br>
-                Inventory Sort: <a href="https://github.com/Beelzebub2/DnDTools" target="_blank">https://github.com/Beelzebub2/DnDTools</a><br>
+                MAP: <a href="https://darkanddarker.map.spellsandguns.com " target="_blank">https://darkanddarker.map.spellsandguns.com </a><br>
+                QUESTS: <a href="https://darkanddarkertracker.com/questtracker " target="_blank">https://darkanddarkertracker.com/questtracker </a><br>
+                PRICE CHECK: <a href="https://darkerdb.com/ " target="_blank">https://darkerdb.com/ </a><br>
+                Ultimate DaD Tool (WiP): <a href="https://www.reddit.com/r/DarkAndDarker/comments/1jo142b/dad_tools_a_project_im_working_on/ " target="_blank">https://www.reddit.com/r/DarkAndDarker/comments/1jo142b/dad_tools_a_project_im_working_on/ </a><br>
+                Inventory Sort: <a href="https://github.com/Beelzebub2/DnDTools " target="_blank">https://github.com/Beelzebub2/DnDTools </a><br>
             </div>
         `,
         errors: `
@@ -161,37 +191,45 @@ background-attachment: fixed;
                 }).map(([code, title]) => createErrorItem(code, errorDescriptions[code])).join('')}
             </ul>
         `,
-        datamine: "<h2>Datamine</h2><p>Инструменты анализа данных.</p><br><a href='https://goo.su/uNKFS' target='_blank' class='link-button'>THX Spells and Guns, 2point</a>",
+        datamine: "<h2>Datamine</h2><p>Инструменты анализа данных.</p><br><a href='https://goo.su/uNKFS ' target='_blank' class='link-button'>THX Spells and Guns, 2point</a>",
+        quests: `
+            <h2>Quests</h2>
+            <p>Информация о популярных квестах и маршрутах.</p>
+            <p><span class="quest-button" onclick="toggleQuestImage()">Квест на останки, книги, гоблинку</span></p>
+            <div id="questImageContainer" style="display:none; text-align:center;">
+                <img src="quests.jpg" alt="Квестовая карта/схема" class="quest-image">
+            </div>
+        `,
         links_rus: `
             <h2>Links RUS</h2>
             <div class="links-rus">
                 <strong>Ру комьюнити</strong><br>
-                Дискорд: <a href="https://discord.gg/s57dss593j" target="_blank">https://discord.gg/s57dss593j</a><br>
-                Вк: <a href="https://vk.me/join/qGzIaWumPHwDF09ZRq_16ANWY0i2djuLPEc=" target="_blank">https://vk.me/join/qGzIaWumPHwDF09ZRq_16ANWY0i2djuLPEc=</a><br>
-                Группа Вк: <a href="https://vk.com/dark.and.darker" target="_blank">https://vk.com/dark.and.darker</a><br>
-                Телега: <a href="https://t.me/darkanddarker_chat" target="_blank">https://t.me/darkanddarker_chat</a><br><br>
+                Дискорд: <a href="https://discord.gg/s57dss593j " target="_blank">https://discord.gg/s57dss593j </a><br>
+                Вк: <a href="https://vk.me/join/qGzIaWumPHwDF09ZRq_16ANWY0i2djuLPEc= " target="_blank">https://vk.me/join/qGzIaWumPHwDF09ZRq_16ANWY0i2djuLPEc= </a><br>
+                Группа Вк: <a href="https://vk.com/dark.and.darker " target="_blank">https://vk.com/dark.and.darker </a><br>
+                Телега: <a href="https://t.me/darkanddarker_chat " target="_blank">https://t.me/darkanddarker_chat </a><br><br>
 
                 <strong>Любые адекватные вопросы (румодеры дс):</strong> @real11ze , @igorechek<br><br>
 
                 <strong>Почему я не могу зайти в игру?</strong><br>
                 Одному б-ну известно почему, возможно патч, возможно сдф.<br>
-                Всю информацию о состоянии серверов можно найти на официальном дискорд сервере: <a href="https://discord.gg/darkanddarker" target="_blank">https://discord.gg/darkanddarker</a><br><br>
+                Всю информацию о состоянии серверов можно найти на официальном дискорд сервере: <a href="https://discord.gg/darkanddarker " target="_blank">https://discord.gg/darkanddarker </a><br><br>
 
                 <strong>Когда вайп?</strong><br>
                 Каждые три-четыре месяца. Крайний вайп был 10го апреля.<br><br>
 
                 <strong>Кого посмотреть</strong><br>
-                Воин: <a href=\"https://www.twitch.tv/nouvelle\" target=\"_blank\">https://www.twitch.tv/nouvelle</a> (Тут должен был быть Юно, но тут Новелл)<br>
-                Лучник: <a href=\"https://www.twitch.tv/benjihawkey\" target=\"_blank\">https://www.twitch.tv/benjihawkey</a> (редко поточит, но отличный лучник)<br>
-                Чернокнижник: <a href=\"https://www.twitch.tv/pressfrigus\" target=\"_blank\">https://www.twitch.tv/pressfrigus</a><br>
-                Бард: <a href=\"https://www.twitch.tv/meideishab\" target=\"_blank\">https://www.twitch.tv/meideishab</a><br>
-                Друид: <a href=\"https://www.twitch.tv/eatsmettv\" target=\"_blank\">https://www.twitch.tv/eatsmettv</a> (Миша)<br>
-                Варвар: <a href=\"https://www.twitch.tv/rebelll52\" target=\"_blank\">https://www.twitch.tv/rebelll52</a> (А кто если не Ребелл?)<br>
-                Плут: <a href=\"https://www.twitch.tv/yaken3000\" target=\"_blank\">https://www.twitch.tv/yaken3000</a> (Симулятор убийства виверны?)<br>
-                Волшебник: <a href=\"https://www.twitch.tv/xxxdym\" target=\"_blank\">twitch.tv/xxxdym</a> (<a href=\"https://www.youtube.com/watch?v=ltsDhpXBnKY\" target=\"_blank\">https://www.youtube.com/watch?v=ltsDhpXBnKY</a>)<br>
+                Воин: <a href=\"https://www.twitch.tv/nouvelle \" target=\"_blank\">https://www.twitch.tv/nouvelle </a> (Тут должен был быть Юно, но тут Новелл)<br>
+                Лучник: <a href=\"https://www.twitch.tv/benjihawkey \" target=\"_blank\">https://www.twitch.tv/benjihawkey </a> (редко поточит, но отличный лучник)<br>
+                Чернокнижник: <a href=\"https://www.twitch.tv/pressfrigus \" target=\"_blank\">https://www.twitch.tv/pressfrigus </a><br>
+                Бард: <a href=\"https://www.twitch.tv/meideishab \" target=\"_blank\">https://www.twitch.tv/meideishab </a><br>
+                Друид: <a href=\"https://www.twitch.tv/eatsmettv \" target=\"_blank\">https://www.twitch.tv/eatsmettv </a> (Миша)<br>
+                Варвар: <a href=\"https://www.twitch.tv/rebelll52 \" target=\"_blank\">https://www.twitch.tv/rebelll52 </a> (А кто если не Ребелл?)<br>
+                Плут: <a href=\"https://www.twitch.tv/yaken3000 \" target=\"_blank\">https://www.twitch.tv/yaken3000 </a> (Симулятор убийства виверны?)<br>
+                Волшебник: <a href=\"https://www.twitch.tv/xxxdym \" target=\"_blank\">twitch.tv/xxxdym</a> (<a href=\"https://www.youtube.com/watch?v=ltsDhpXBnKY \" target="_blank">Видео</a>)<br>
                 Чародей: placeholder<br><br>
 
-                <strong>Новости:</strong> <a href=\"https://www.youtube.com/@djedybreamtv\" target=\"_blank\">https://www.youtube.com/@djedybreamtv</a>
+                <strong>Новости:</strong> <a href=\"https://www.youtube.com/ @djedybreamtv\" target=\"_blank\">https://www.youtube.com/ @djedybreamtv</a>
             </div>
         `
     };
@@ -199,6 +237,11 @@ background-attachment: fixed;
     function toggleDescription(code) {
         const descEl = document.getElementById("desc-" + code);
         descEl.style.display = descEl.style.display === "block" ? "none" : "block";
+    }
+
+    function toggleQuestImage() {
+        const imgBox = document.getElementById("questImageContainer");
+        imgBox.style.display = imgBox.style.display === "none" ? "block" : "none";
     }
 
     function showTab(tab) {
@@ -209,4 +252,3 @@ background-attachment: fixed;
 
 </body>
 </html>
-```
